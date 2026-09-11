@@ -54,7 +54,6 @@ configure_sshd() {
     error "SSH n'est pas installé"
     return 1
   fi
-
   warning "Sécurisation de SSH"
   user=$(id -un 1000)
   tee "/etc/ssh/sshd_config.d/$user.conf" <<EOF
