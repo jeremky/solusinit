@@ -49,35 +49,6 @@ install_hytale() {
   echo
 }
 
-configure_sshd() {
-  if [[ ! -d /etc/ssh/sshd_config.d ]]; then
-    error "SSH n'est pas installé"
-    return 1
-  fi
-  warning "Sécurisation de SSH"
-  user=$(id -un 1000)
-  tee "/etc/ssh/sshd_config.d/$user.conf" <<EOF
-# Secure Config
-X11Forwarding no
-AllowUsers $user
-HostKey /etc/ssh/ssh_host_ed25519_key
-PasswordAuthentication yes
-KbdInteractiveAuthentication yes
-MaxAuthTries 3
-ClientAliveInterval 300
-ClientAliveCountMax 2
-KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org
-MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com
-Ciphers aes256-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-gcm@openssh.com,aes128-ctr
-EOF
-  systemctl restart sshd || {
-    error "Problème lors du redémarrage de SSH"
-    exit 1
-  }
-  message "SSH sécurisé. Modifiez le fichier /etc/ssh/sshd_config.d/$user.conf pour désactiver la connexion par mot de passe après avoir importé votre clé ed25519"
-  echo
-}
-
 # Exécution
 dir="$(dirname "$0")/config"
 cfg="$dir/config.cfg"
