@@ -51,8 +51,14 @@ install_flatpaks() {
 install_geforcenow() {
   warning "Installation de GeforceNow"
   flatpak remote-add --system --if-not-exists GeForceNOW https://international.download.nvidia.com/GFNLinux/flatpak/geforcenow.flatpakrepo
-  flatpak install flathub org.freedesktop.Platform/x86_64/24.08
-  flatpak install -y --system GeForceNOW com.nvidia.geforcenow
+  flatpak install -y --system flathub org.freedesktop.Platform/x86_64/24.08 || {
+    error "Problème lors de l'installation de la plateforme Freedesktop"
+    return 1
+  }
+  flatpak install -y --system GeForceNOW com.nvidia.geforcenow || {
+    error "Problème lors de l'installation de GeforceNow"
+    return 1
+  }
   message "Installation de GeforceNow terminée"
   echo
 }
