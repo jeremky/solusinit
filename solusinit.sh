@@ -48,6 +48,16 @@ install_flatpaks() {
   fi
 }
 
+install_hyprland() {
+  warning "Installation de hyprland"
+  (eopkg -y install -c desktop.hyprland && eopkg -y install waybar) || {
+    error "Problème lors de l'installation de hyprland"
+    return 1
+  }
+  message "Installation de Hyprland terminée"
+  echo
+}
+
 install_geforcenow() {
   warning "Installation de GeforceNow"
   flatpak remote-add --system --if-not-exists GeForceNOW https://international.download.nvidia.com/GFNLinux/flatpak/geforcenow.flatpakrepo
