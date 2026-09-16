@@ -48,13 +48,25 @@ install_flatpaks() {
   fi
 }
 
-install_hyprland() {
-  warning "Installation de hyprland"
-  (eopkg -y install -c desktop.hyprland && eopkg -y install waybar) || {
-    error "Problème lors de l'installation de hyprland"
+install_herdr() {
+  warning "Installation de herdr"
+  user=$(id -un 1000)
+  (sudo -u "$user" -H sh -c 'curl -fsSL https://herdr.dev/install.sh | sh') || {
+    error "Problème lors de l'installation de herdr"
     return 1
   }
-  message "Installation de Hyprland terminée"
+  message "Installation de herdr terminée"
+  echo
+}
+
+install_claude() {
+  warning "Installation de claude"
+  user=$(id -un 1000)
+  (sudo -u "$user" -H bash -c 'curl -fsSL https://claude.ai/install.sh | bash') || {
+    error "Problème lors de l'installation de claude"
+    return 1
+  }
+  message "Installation de claude terminée"
   echo
 }
 

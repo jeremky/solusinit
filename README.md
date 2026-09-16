@@ -5,6 +5,9 @@ Script automatisant l'installation et le paramétrage de SolusOS.
 ## Fonctionnalités
 
 - `install_packages` : met à jour le système et installe les applications présentes dans le fichier `config/packages.cfg`
+- `install_flatpaks` : installe les applications présentes dans le fichier `config/flatpacks.cfg`
+- `install_herdr` : installe multiplexeur herdr pour le user 1000
+- `install_claude` : installe claude cli pour le user 1000
 - `install_geforcenow` : ajoute le dépôt nvidia et installe GeforceNow via flathub
 - `install_hytale` : télécharge et installe le flatpak Hytale
 - `configure_sshd` : crée un fichier pour `sshd` (`/etc/ssh/sshd_config.d/<user>.conf`) avec les éléments suivants :
@@ -28,43 +31,14 @@ Commentez les fonctions que vous ne voulez pas utiliser. Exemple :
 # solusinit config
 
 install_packages
+install_flatpaks
+install_herdr
+install_claude
+
 install_geforcenow
 install_hytale
 
 configure_sshd
-```
-
-Avec le fichier de config se trouve `config/packages.cfg`, contenant la liste des paquets à installer si `install_packages` est actif.
-
-Exemple :
-
-```txt
-# solusinit packages list
-
-apostrophe
-btop
-dust
-fd
-font-jetbrainsmono-ttf
-fzf
-gamemode
-gamescope
-git
-ghostty
-gnome-shell-extension-dash-to-dock
-golang
-icdiff
-mangohud
-ncdu
-openssh-server
-papirus-icon-theme
-procs
-ripgrep
-shellcheck
-steam
-vim
-zed
-zoxide
 ```
 
 ## Utilisation
@@ -72,5 +46,5 @@ zoxide
 Une fois le fichier `config/config.cfg` modifié, lancez le script avec les droits root :
 
 ```bash
-sudo ./dnfinstall.sh
+sudo ./solusinit.sh
 ```
