@@ -10,17 +10,10 @@ Script automatisant l'installation et le paramétrage de SolusOS.
 - `install_claude` : installe claude cli pour le user 1000
 - `install_geforcenow` : ajoute le dépôt nvidia et installe GeforceNow via flathub
 - `install_hytale` : télécharge et installe le flatpak Hytale
-- `configure_sshd` : crée un fichier pour `sshd` (`/etc/ssh/sshd_config.d/<user>.conf`) avec les éléments suivants :
-  - Restreint l'accès à l'utilisateur principal (UID 1000)
-  - Désactive le forwarding X11
-  - Force l'utilisation de la clé `ed25519` uniquement
-  - Limite les tentatives d'authentification à 3
-  - Restreint les algorithmes aux recommandations modernes :
-    - **Kex** : `curve25519-sha256`
-    - **Ciphers** : `aes256-gcm`, `aes256-ctr`, `aes192-ctr`, `aes128-gcm`, `aes128-ctr`
-    - **MACs** : `hmac-sha2-512-etm`, `hmac-sha2-256-etm`
+- `configure_sshd` : sécurise les accès au serveur openssh
 
-> **Attention** : `PasswordAuthentication` reste activé par défaut. Penser à le désactiver dans `/etc/ssh/sshd_config.d/<user>.conf` après avoir configuré les clés SSH.
+> [!IMPORTANT]
+> Le fichier sera déposé dans `/etc/ssh/sshd_config.d/<user>.conf`
 
 ## Configuration
 
