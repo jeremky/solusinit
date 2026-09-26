@@ -1,110 +1,110 @@
 #!/bin/bash
 
-# Messages en couleur
+# Colored messages
 error() { echo -e "\033[0;31m❯ $*\033[0m"; }
 message() { echo -e "\033[0;36m──────────\033[0m\n\033[0;32m❯ $*\033[0m"; }
 warning() { echo -e "\033[0;33m❯ $*\033[0m\n\033[0;36m──────────\033[0m"; }
 
-# Vérification de l'OS :
+# Check OS
 if ! command -v eopkg >/dev/null; then
-  error "Ce script nécessite eopkg (Solus)"
+  error "This script requires eopkg (Solus)"
   exit 1
 fi
 
-# Vérification des droits root
+# Check root privileges
 if [[ "$EUID" -ne 0 ]]; then
-  error "Droits root nécessaires"
+  error "Root privileges required"
   exit 1
 fi
 
-# Fonctions
+# Functions
 install_packages() {
-  warning "Mise à jour des paquets"
+  warning "Updating packages"
   eopkg -y upgrade || {
-    error "Problème lors de la mise à jour des paquets"
+    error "Error while updating packages"
     return 1
   }
   echo
   if [[ -f "$list" ]]; then
-    warning "Installation des paquets"
+    warning "Installing packages"
     grep -v -e '#' -e '^$' "$list" | xargs -r eopkg -y install || {
-      error "Problème lors de l'installation des paquets"
+      error "Error while installing packages"
       return 1
     }
-    message "Installation des paquets terminée"
+    message "Package installation complete"
     echo
   fi
 }
 
 install_flatpaks() {
   if [[ -f "$apps" ]]; then
-    warning "Installation des flatpaks"
+    warning "Installing flatpaks"
     grep -v -e '#' -e '^$' "$apps" | xargs -r flatpak install -y --system flathub || {
-      error "Problème lors de l'installation des flatpaks"
+      error "Error while installing flatpaks"
       return 1
     }
-    message "Installation des flatpaks terminée"
+    message "Flatpak installation complete"
     echo
   fi
 }
 
 install_herdr() {
-  warning "Installation de herdr"
+  warning "Installing herdr"
   user=$(id -un 1000)
   (sudo -u "$user" -H sh -c 'curl -fsSL https://herdr.dev/install.sh | sh') || {
-    error "Problème lors de l'installation de herdr"
+    error "Error while installing herdr"
     return 1
   }
-  message "Installation de herdr terminée"
+  message "herdr installation complete"
   echo
 }
 
 install_claude() {
-  warning "Installation de claude"
+  warning "Installing claude"
   user=$(id -un 1000)
   (sudo -u "$user" -H bash -c 'curl -fsSL https://claude.ai/install.sh | bash') || {
-    error "Problème lors de l'installation de claude"
+    error "Error while installing claude"
     return 1
   }
-  message "Installation de claude terminée"
+  message "claude installation complete"
   echo
 }
 
 install_geforcenow() {
-  warning "Installation de GeforceNow"
+  warning "Installing GeforceNow"
   flatpak remote-add --system --if-not-exists GeForceNOW https://international.download.nvidia.com/GFNLinux/flatpak/geforcenow.flatpakrepo
   flatpak install -y --system flathub org.freedesktop.Platform/x86_64/24.08 || {
-    error "Problème lors de l'installation de la plateforme Freedesktop"
+    error "Error while installing the Freedesktop platform"
     return 1
   }
   flatpak install -y --system GeForceNOW com.nvidia.geforcenow || {
-    error "Problème lors de l'installation de GeforceNow"
+    error "Error while installing GeforceNow"
     return 1
   }
-  message "Installation de GeforceNow terminée"
+  message "GeforceNow installation complete"
   echo
 }
 
 install_hytale() {
-  warning "Installation de Hytale"
+  warning "Installing Hytale"
   (cd /tmp && wget https://launcher.hytale.com/builds/release/linux/amd64/hytale-launcher-latest.flatpak) || {
-    error "Problème lors du téléchargement de Hytale"
+    error "Error while downloading Hytale"
     return 1
   }
   flatpak --system install -y /tmp/hytale-launcher-latest.flatpak || {
-    error "Problème lors de l'installation de Hytale"
+    error "Error while installing Hytale"
     return 1
   }
-  message "Installation de Hytale terminée"
+  message "Hytale installation complete"
   echo
 }
 
 configure_sshd() {
   if [[ ! -d /etc/ssh/sshd_config.d ]]; then
-    error "SSH n'est pas installé"
+    error "SSH is not installed"
     return 1
   fi
-  warning "Sécurisation de SSH"
+  warning "Securing SSH"
   user=$(id -un 1000)
   tee "/etc/ssh/sshd_config.d/$user.conf" <<EOF
 # Secure Config
@@ -121,20 +121,20 @@ MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com
 Ciphers aes256-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-gcm@openssh.com,aes128-ctr
 EOF
   systemctl restart sshd || {
-    error "Problème lors du redémarrage de SSH"
+    error "Error while restarting SSH"
     exit 1
   }
-  message "SSH sécurisé"
+  message "SSH secured"
   echo
 }
 
-# Exécution
+# Execution
 dir="$(dirname "$0")/config"
 cfg="$dir/config.cfg"
 list="$dir/packages.cfg"
 apps="$dir/flatpaks.cfg"
 if [[ ! -f "$cfg" ]] || [[ ! -f "$list" ]]; then
-  error "Fichier $cfg ou $list introuvable"
+  error "File $cfg or $list not found"
   exit 1
 fi
 echo
@@ -143,7 +143,7 @@ while read -r line; do
   if declare -f "$line" >/dev/null; then
     "$line"
   else
-    error "Aucune fonction ne correspond au paramètre $line"
+    error "No function matches parameter $line"
     exit 1
   fi
 done <"$cfg"

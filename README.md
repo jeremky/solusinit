@@ -1,24 +1,24 @@
 # solusinit
 
-Script automatisant l'installation et le paramétrage de SolusOS.
+A script that automates installing and configuring SolusOS.
 
-## Fonctionnalités
+## Features
 
-- `install_packages` : met à jour le système et installe les applications présentes dans le fichier `config/packages.cfg`
-- `install_flatpaks` : installe les applications présentes dans le fichier `config/flatpacks.cfg`
-- `install_herdr` : installe multiplexeur herdr pour le user 1000
-- `install_claude` : installe claude cli pour le user 1000
-- `install_geforcenow` : ajoute le dépôt nvidia et installe GeforceNow via flathub
-- `install_hytale` : télécharge et installe le flatpak Hytale
-- `configure_sshd` : sécurise les accès au serveur openssh
+- `install_packages`: updates the system and installs the applications listed in `config/packages.cfg`
+- `install_flatpaks`: installs the applications listed in `config/flatpaks.cfg`
+- `install_herdr`: installs the herdr multiplexer for user 1000
+- `install_claude`: installs the Claude CLI for user 1000
+- `install_geforcenow`: adds the NVIDIA repository and installs GeforceNow via Flathub
+- `install_hytale`: downloads and installs the Hytale flatpak
+- `configure_sshd`: hardens access to the OpenSSH server
 
 > [!IMPORTANT]
-> Le fichier sera déposé dans `/etc/ssh/sshd_config.d/<user>.conf`
+> The file will be placed in `/etc/ssh/sshd_config.d/<user>.conf`
 
 ## Configuration
 
-Le fichier `config/config.cfg` permet de paramétrer l'exécution du script selon vos préférences.
-Commentez les fonctions que vous ne voulez pas utiliser. Exemple :
+The `config/config.cfg` file lets you configure how the script runs to suit your preferences.
+Comment out the functions you don't want to use. Example:
 
 ```txt
 # solusinit config
@@ -34,9 +34,9 @@ install_hytale
 configure_sshd
 ```
 
-## Utilisation
+## Usage
 
-Une fois le fichier `config/config.cfg` modifié, lancez le script avec les droits root :
+Once you've edited `config/config.cfg`, run the script with root privileges:
 
 ```bash
 sudo ./solusinit.sh
