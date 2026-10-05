@@ -116,7 +116,7 @@ KbdInteractiveAuthentication no
 MaxAuthTries 3
 ClientAliveInterval 300
 ClientAliveCountMax 2
-KexAlgorithms sntrup761x25519-sha512,mlkem768x25519-sha256,curve25519-sha256,curve25519-sha256@libssh.org
+KexAlgorithms mlkem768x25519-sha256,sntrup761x25519-sha512@openssh.com,curve25519-sha256
 MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com
 Ciphers aes256-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-gcm@openssh.com,aes128-ctr
 EOF
