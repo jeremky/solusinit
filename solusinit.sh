@@ -48,6 +48,22 @@ install_flatpaks() {
   fi
 }
 
+install_npm() {
+  if [[ -f "$nodenpm" ]]; then
+    warning "Installing npm packages"
+    eopkg -y install nodejs || {
+      error "Error while installing nodejs"
+      return 1
+    }
+    grep -v -e '#' -e '^$' "$nodenpm" | xargs -r sudo npm -g install || {
+      error "Error while installing npm packages"
+      return 1
+    }
+    message "npm package installation complete"
+    echo
+  fi
+}
+
 install_herdr() {
   warning "Installing herdr"
   user=$(id -un 1000)
@@ -133,6 +149,7 @@ dir="$(dirname "$0")/config"
 cfg="$dir/config.cfg"
 list="$dir/packages.cfg"
 apps="$dir/flatpaks.cfg"
+nodenpm="$dir/npm.cfg"
 if [[ ! -f "$cfg" ]] || [[ ! -f "$list" ]]; then
   error "File $cfg or $list not found"
   exit 1
