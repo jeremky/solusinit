@@ -64,6 +64,21 @@ install_npm() {
   fi
 }
 
+install_webi() {
+  curl -sS https://webi.sh/webi | sh
+  #shellcheck disable=SC1091
+  source "$HOME/.config/envman/PATH.env"
+  if [[ -f "$webi" ]]; then
+    warning "Installing packages"
+    grep -v -e '#' -e '^$' "$webi" | xargs -r webi "$webi" || {
+      error "Error while installing packages"
+      return 1
+    }
+    message "Package installation complete"
+    echo
+  fi
+}
+
 install_herdr() {
   warning "Installing herdr"
   user=$(id -un 1000)
@@ -150,6 +165,7 @@ cfg="$dir/config.cfg"
 list="$dir/packages.cfg"
 apps="$dir/flatpaks.cfg"
 nodenpm="$dir/npm.cfg"
+webi="$dir/webi.cfg"
 if [[ ! -f "$cfg" ]] || [[ ! -f "$list" ]]; then
   error "File $cfg or $list not found"
   exit 1
