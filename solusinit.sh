@@ -13,7 +13,7 @@ fi
 
 # Check root privileges
 if [[ "$EUID" -ne 0 ]]; then
-  error "Root privileges required"
+  error "Need to be root"
   exit 1
 fi
 
@@ -159,18 +159,19 @@ fi
 if [[ -n "$1" ]]; then
   if declare -f "$1" >/dev/null; then
     "$1"
+    exit 0
   else
     error "Function $1 not found"
     exit 1
   fi
-else
-  while read -r line; do
-    [[ -z "$line" || "$line" == \#* ]] && continue
-    if declare -f "$line" >/dev/null; then
-      "$line"
-    else
-      error "No function matches parameter $line"
-      exit 1
-    fi
-  done <"$cfg"
 fi
+
+while read -r line; do
+  [[ -z "$line" || "$line" == \#* ]] && continue
+  if declare -f "$line" >/dev/null; then
+    "$line"
+  else
+    error "No function matches parameter $line"
+    exit 1
+  fi
+done <"$cfg"
