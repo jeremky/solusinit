@@ -149,18 +149,28 @@ dir="$(dirname "$0")/config"
 cfg="$dir/config.cfg"
 list="$dir/packages.cfg"
 apps="$dir/flatpaks.cfg"
-nodenpm="$dir/npm.cfg"
+nodenpm="$dir/nodenpm.cfg"
+
 if [[ ! -f "$cfg" ]] || [[ ! -f "$list" ]]; then
   error "File $cfg or $list not found"
   exit 1
 fi
-echo
-while read -r line; do
-  [[ -z "$line" || "$line" == \#* ]] && continue
-  if declare -f "$line" >/dev/null; then
-    "$line"
+
+if [[ -n "$1" ]]; then
+  if declare -f "$1" >/dev/null; then
+    "$1"
   else
-    error "No function matches parameter $line"
+    error "Function $1 not found"
     exit 1
   fi
-done <"$cfg"
+else
+  while read -r line; do
+    [[ -z "$line" || "$line" == \#* ]] && continue
+    if declare -f "$line" >/dev/null; then
+      "$line"
+    else
+      error "No function matches parameter $line"
+      exit 1
+    fi
+  done <"$cfg"
+fi
